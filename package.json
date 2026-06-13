@@ -1,0 +1,12 @@
+{
+  "name": "payment-ui",
+  "version": "1.0.0",
+  "description": "idp-lab-org/payment-ui- repo",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  }
+}

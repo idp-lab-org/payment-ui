@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: payment-ui
+  description: idp-lab-org/payment-ui- repo
+  annotations:
+    github.com/project-slug: idp-lab-org/payment-ui
+spec:
+  type: service
+  lifecycle: development
+  owner: team-angular
