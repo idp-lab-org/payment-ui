@@ -1,46 +1,46 @@
 # 💳 payment-ui
 
-Frontend service for PaymentOS — a sample Internal Developer Platform demo application.
+Node.js frontend service for PaymentOS — created automatically via the IDP Lab Backstage golden path template.
 
-## What is this?
+## What it does
 
-This service was created automatically via the **IDP Lab Backstage golden path template**. A developer filled a form in Backstage and this entire repo — including CI pipeline and Kubernetes deployment — was generated automatically.
+Serves the **Secure Message Vault** — a demo UI that proves service-to-service communication inside Kubernetes:
 
-## Features
+1. User types a message
+2. UI sends it to `payment-service` backend via Kubernetes internal DNS
+3. Backend encrypts it and returns metadata
+4. UI displays: encrypted text, message ID, pod name, namespace, processing time, round-trip latency
 
-- **Secure Message Vault** — type a message, send it to the backend, receive it encrypted
-- Demonstrates service-to-service communication inside Kubernetes
-- Shows real pod name, namespace, and round-trip latency from the backend
+## How it was created
+
+A developer opened Backstage, clicked **Create → New Service**, selected:
+- Language: **Node.js**
+- Starter: **Full Sample App**
+- Namespace: **dev**
+- Team: **team-angular**
+
+Backstage automatically:
+- Created this GitHub repo with working code + CI pipeline
+- Raised a PR to [idp-lab-gitops](https://github.com/idp-lab-org/idp-lab-gitops) with deployment manifests
+- Registered the service in the Backstage catalog
+
+Zero manual Kubernetes work.
 
 ## Tech Stack
 
 - **Runtime:** Node.js + Express
-- **Deployed to:** Kubernetes (`dev` namespace)
-- **CI:** GitHub Actions → Docker Hub
-- **CD:** ArgoCD (GitOps)
+- **Deployed to:** Kubernetes `dev` namespace
+- **CI:** GitHub Actions → `sky2108/payment-ui` on Docker Hub
+- **CD:** ArgoCD (GitOps via idp-lab-gitops)
 
-## Architecture
+## Service Communication
 
 ```
-Browser
-  ↓
-payment-ui (Node.js) — port 80
-  ↓ internal Kubernetes DNS
-payment-service (Python) — port 80
+Browser → payment-ui:80 → /api/encrypt proxy → payment-service:80
+                              (Kubernetes DNS: http://payment-service)
 ```
 
-## How it was created
-
-1. Opened Backstage at http://localhost:3000
-2. Clicked **Create → New Service**
-3. Selected: Node.js, Full Sample, dev namespace, Team Angular
-4. Backstage automatically:
-   - Created this GitHub repo
-   - Added CI workflow
-   - Raised a PR to [idp-lab-gitops](https://github.com/idp-lab-org/idp-lab-gitops) with deployment manifests
-   - Registered the service in the Backstage catalog
-
-## Running locally
+## Running Locally
 
 ```bash
 npm install
@@ -48,12 +48,12 @@ node index.js
 # → http://localhost:8080
 ```
 
-## CI/CD
+## CI/CD Flow
 
-Every push to `main`:
+Every merge to `main`:
 1. GitHub Actions builds Docker image
-2. Pushes to `sky2108/payment-ui:<sha>` on Docker Hub
+2. Pushes `sky2108/payment-ui:<sha>` to Docker Hub
 3. Updates `apps/payment-ui/deployment.yaml` in idp-lab-gitops
-4. ArgoCD detects change and redeploys automatically
+4. ArgoCD detects change → redeploys automatically
 
-Part of [idp-lab-org](https://github.com/idp-lab-org) — Mini IDP portfolio project.
+Part of [idp-lab-org](https://github.com/idp-lab-org) — built by [@sky2194](https://github.com/sky2194)
